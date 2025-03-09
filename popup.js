@@ -19,6 +19,8 @@ const storage = {
     }
 };
 
+const THEME_KEY = 'preferredTheme';
+
 const metrics = [
     'factDensity',
     'biasContent',
@@ -35,7 +37,12 @@ const badges = {
 };
 
 async function initializeUI() {
-    const result = await storage.get(metrics);
+    const result = await storage.get([...metrics, THEME_KEY]);
+    
+    const savedTheme = result[THEME_KEY] || 
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(savedTheme);
+    
     metrics.forEach(metric => {
         const value = result[metric] || 50;
         const valueDisplay = document.getElementById(`${metric}Value`);
@@ -45,7 +52,25 @@ async function initializeUI() {
     });
     updateBadges();
 
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
     document.getElementById('save').addEventListener('click', saveSettings);
+}
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.getElementById('theme-toggle').textContent = '☀️';
+    } else {
+        document.body.classList.remove('dark-theme');
+        document.getElementById('theme-toggle').textContent = '🌙';
+    }
+}
+
+async function toggleTheme() {
+    const isDark = document.body.classList.contains('dark-theme');
+    const newTheme = isDark ? 'light' : 'dark';
+    await storage.set({ [THEME_KEY]: newTheme });
+    applyTheme(newTheme);
 }
 
 function applyColorClass(elementId, value) {
@@ -98,28 +123,28 @@ function updateBadges() {
         style.setAttribute('data-badges', 'true');
         style.textContent = `
             .badge {
-                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                background: linear-gradient(135deg, var(--badge-bg-start) 0%, var(--badge-bg-end) 100%);
                 padding: 15px;
                 border-radius: 8px;
                 text-align: center;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                border: 1px solid #dee2e6;
+                box-shadow: 0 2px 4px var(--box-shadow);
+                border: 1px solid var(--border-color);
                 transition: transform 0.2s, box-shadow 0.2s;
                 cursor: default;
             }
             .badge:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+                box-shadow: 0 4px 8px var(--box-shadow);
             }
             .badge h4 {
                 margin: 0 0 8px 0;
-                color: #495057;
+                color: var(--badge-text);
                 font-size: 16px;
             }
             .badge p {
                 margin: 0;
                 font-size: 13px;
-                color: #6c757d;
+                color: var(--badge-desc);
                 line-height: 1.4;
             }
             @keyframes badgeAppear {

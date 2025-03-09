@@ -1,16 +1,40 @@
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #333;
+  --container-bg: white;
+  --border-color: #dee2e6;
+  --box-shadow: rgba(0,0,0,0.1);
+  --button-color: #FF9C9C;
+  --label-color: #495057;
+  --value-color: #6c757d;
+}
+
+body.dark-theme {
+  --bg-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --container-bg: #2d2d2d;
+  --border-color: #444;
+  --box-shadow: rgba(0,0,0,0.2);
+  --button-color: #FF9C9C;
+  --label-color: #c0c0c0;
+  --value-color: #aaaaaa;
+}
+
 body {
     min-width: 300px;   
     min-height: 400px;   
     margin: 0;
     padding: 20px;
     font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 .value-display {
     position: absolute;
     right: 0;
     top: 0;
-    color: #6c757d;
+    color: var(--value-color);
     font-weight: bold;
 }
 
@@ -28,21 +52,21 @@ body {
 
 .settings-container {
     padding: 20px;
-    background: #f8f9fa;
+    background: var(--bg-color);
 }
 
 h2 {
     margin: 0 0 20px 0;
-    color: #333;
-    border-bottom: 2px solid #dee2e6;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
 }
 
 .metric-container {
-    background: white;
+    background: var(--container-bg);
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px var(--box-shadow);
     margin-bottom: 20px;
 }
 
@@ -55,13 +79,13 @@ label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #495057;
+    color: var(--label-color);
 }
 
 button#save {
     width: 100%;
     padding: 12px;
-    background: #FF9C9C;
+    background: var(--button-color);
     color: white;
     border: none;
     border-radius: 4px;
@@ -71,5 +95,28 @@ button#save {
 }
 
 button#save:hover {
-    background: #FF9C9C;
+    background: var(--button-color);
+}
+
+/* Theme toggle button */
+#theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 5px;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#theme-toggle:hover {
+    background-color: rgba(128, 128, 128, 0.2);
 }

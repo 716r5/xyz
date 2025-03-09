@@ -1,30 +1,58 @@
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #333;
+  --container-bg: white;
+  --border-color: #dee2e6;
+  --box-shadow: rgba(0,0,0,0.1);
+  --button-color: #FF9C9C;
+  --label-color: #495057;
+  --value-color: #6c757d;
+  --badge-bg-start: #f8f9fa;
+  --badge-bg-end: #e9ecef;
+  --badge-text: #495057;
+  --badge-desc: #6c757d;
+}
+
+body.dark-theme {
+  --bg-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --container-bg: #2d2d2d;
+  --border-color: #444;
+  --box-shadow: rgba(0,0,0,0.2);
+  --button-color: #FF9C9C; 
+  --label-color: #c0c0c0;
+  --value-color: #aaaaaa;
+  --badge-bg-start: #333;
+  --badge-bg-end: #222;
+  --badge-text: #ddd;
+  --badge-desc: #aaa;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f8f9fa;
-  width: 2500px;
-  height: 1000px;
-  padding: 25px;
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
 .settings-container {
   padding: 20px;
-  background: #f8f9fa;
+  background: var(--bg-color);
 }
 
 h2, h3 {
   margin: 0 0 20px 0;
-  color: #333;
-  border-bottom: 2px solid #dee2e6;
+  color: var(--text-color);
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 10px;
 }
 
 .metric-container {
-  background: white;
+  background: var(--container-bg);
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--box-shadow);
   margin-bottom: 20px;
 }
 
@@ -37,21 +65,21 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #495057;
+  color: var(--label-color);
 }
 
 .value-display {
   position: absolute;
   right: 0;
   top: 0;
-  color: #6c757d;
+  color: var(--value-color);
 }
 
 .badge-container {
-  background: white;
+  background: var(--container-bg);
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--box-shadow);
   margin-bottom: 20px;
 }
 
@@ -62,12 +90,12 @@ label {
 }
 
 .badge {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, var(--badge-bg-start) 0%, var(--badge-bg-end) 100%);
   padding: 15px;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px var(--box-shadow);
+  border: 1px solid var(--border-color);
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: default;
 }
@@ -79,21 +107,21 @@ label {
 
 .badge h4 {
   margin: 0 0 8px 0;
-  color: #495057;
+  color: var(--badge-text);
   font-size: 16px;
 }
 
 .badge p {
   margin: 0;
   font-size: 13px;
-  color: #6c757d;
+  color: var(--badge-desc);
   line-height: 1.4;
 }
 
 button#save {
   width: 100%;
   padding: 12px;
-  background: #FF9C9C;
+  background: var(--button-color);
   color: white;
   border: none;
   border-radius: 4px;
@@ -103,30 +131,30 @@ button#save {
 }
 
 button#save:hover {
-  background: #FF9C9C;
+  background: var(--button-color);
 }
 
 #nutrition-fab {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #FF9C9C;
+  background: var(--button-color);
   border: none;
   border-radius: 50%;
   width: 56px;
   height: 56px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px var(--box-shadow);
 }
 
 .label-container {
   position: fixed;
   bottom: 200px;
   right: 200px;
-  background: white;
+  background: var(--container-bg);
   border-radius: 8px;
   width: 300px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px var(--box-shadow);
   z-index: 9999;
 }
 
@@ -135,7 +163,7 @@ button#save:hover {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .metric-grid {
@@ -156,6 +184,6 @@ button#save:hover {
 }
 
 .metric-value {
-  color: #FF9C9C;
+  color: var(--button-color);
   font-weight: 700;
 }

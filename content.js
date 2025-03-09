@@ -1,14 +1,14 @@
 function extractText() {
     return document.body.innerText;  
-  }
-  
-  chrome.runtime.sendMessage({ action: "analyzeContent", text: extractText() }, response => {
+}
+
+chrome.runtime.sendMessage({ action: "analyzeContent", text: extractText() }, response => {
     if (response.result) {
-      displayNutritionLabel(response.result);
+        displayNutritionLabel(response.result);
     }
-  });
-  
-  function displayNutritionLabel(data) {
+});
+
+function displayNutritionLabel(data) {
     const label = document.createElement("div");
     label.id = "Lazy Bird";
     label.innerHTML = `
@@ -23,7 +23,7 @@ function extractText() {
       </div>
     `;
     document.body.appendChild(label);
-  }
+}
 
 class NutritionLabel extends HTMLElement {
   constructor() {
@@ -41,8 +41,6 @@ class NutritionLabel extends HTMLElement {
     `;
   }
 }
-
-customElements.define('nutrition-label', NutritionLabel);
 
 const createFAB = () => {
   const fab = document.createElement('button');
