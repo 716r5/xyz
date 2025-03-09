@@ -26,6 +26,8 @@ body.dark-theme {
   --badge-bg-end: #222;
   --badge-text: #ddd;
   --badge-desc: #aaa;
+  background-color: #121212;
+  color: #ffffff;
 }
 
 body {
@@ -34,6 +36,8 @@ body {
   padding: 0;
   background: var(--bg-color);
   color: var(--text-color);
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .settings-container {
@@ -186,4 +190,8 @@ button#save:hover {
 .metric-value {
   color: var(--button-color);
   font-weight: 700;
+}
+
+#theme-toggle {
+  cursor: pointer;
 }

@@ -12,8 +12,7 @@
         {
             "matches": ["*://*/*"],
             "js": ["content.js"],
-            "css": ["styles.css"],
-            "html": ["popup.html"]
+            "css": ["styles.css"]
         }
     ],
     "action": {
@@ -29,7 +28,7 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["background.css", "styles.css"],
+            "resources": ["styles.css"],
             "matches": ["<all_urls>"]
         }
     ]

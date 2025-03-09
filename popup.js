@@ -36,6 +36,22 @@ const badges = {
     perspectiveSeeker: { name: 'Perspective Seeker', description: 'Values diverse viewpoints' }
 };
 
+function updateUI(analysis) {
+  document.getElementById('factDensityValue').textContent = `${analysis.fact_density}%`;
+  document.getElementById('biasContentValue').textContent = `${analysis.bias_content}%`;
+  document.getElementById('emotionalCaloriesValue').textContent = `${analysis.emotional_calories}%`;
+  document.getElementById('perspectiveVitaminsValue').textContent = `${analysis.perspective_vitamins}%`;
+  document.getElementById('complexityIndexValue').textContent = `${analysis.complexity_index}%`;
+  document.getElementById('sourceMineralsValue').textContent = `${analysis.source_minerals}%`;
+  
+  applyColorClass('factDensityValue', analysis.fact_density);
+  applyColorClass('biasContentValue', analysis.bias_content);
+  applyColorClass('emotionalCaloriesValue', analysis.emotional_calories);
+  applyColorClass('perspectiveVitaminsValue', analysis.perspective_vitamins);
+  applyColorClass('complexityIndexValue', analysis.complexity_index);
+  applyColorClass('sourceMineralsValue', analysis.source_minerals);
+}
+
 async function initializeUI() {
     const result = await storage.get([...metrics, THEME_KEY]);
     
@@ -43,23 +59,32 @@ async function initializeUI() {
         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     applyTheme(savedTheme);
     
-    metrics.forEach(metric => {
-        const value = result[metric] || 50;
-        const valueDisplay = document.getElementById(`${metric}Value`);
-        valueDisplay.textContent = `${value}%`;
-
-        applyColorClass(`${metric}Value`, value);
+    chrome.storage.local.get(['currentPageAnalysis'], (result) => {
+        if (result.currentPageAnalysis) {
+            updateUI(result.currentPageAnalysis);
+        } else {
+            metrics.forEach(metric => {
+                const value = result[metric] || 50;
+                const valueDisplay = document.getElementById(`${metric}Value`);
+                valueDisplay.textContent = `${value}%`;
+                applyColorClass(`${metric}Value`, value);
+            });
+        }
     });
+    
     updateBadges();
 
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-    document.getElementById('save').addEventListener('click', saveSettings);
+    document.getElementById('save').addEventListener('click', refreshAnalysis);
 }
 
 function applyTheme(theme) {
     if (theme === 'dark') {
         document.body.classList.add('dark-theme');
-        document.getElementById('theme-toggle').textContent = '☀️';
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.textContent = '☀️';
+        }
     } else {
         document.body.classList.remove('dark-theme');
         document.getElementById('theme-toggle').textContent = '🌙';
@@ -78,23 +103,31 @@ function applyColorClass(elementId, value) {
     element.classList.remove('value-low', 'value-medium', 'value-high');
 
     if (value <= 33) {
-        element.classList.add('value-low'); // Red low values (0-33%)
+        element.classList.add('value-low');
     } else if (value <= 66) {
-        element.classList.add('value-medium'); // Yellow medium values (34-66%)
+        element.classList.add('value-medium'); 
     } else {
-        element.classList.add('value-high'); // Green  high values (67-100%)
+        element.classList.add('value-high');
     }
 }
 
-async function saveSettings() {
-    const settings = {};
-    metrics.forEach(metric => {
-        settings[metric] = parseInt(document.getElementById(`${metric}Value`).textContent);
-    });
-
-    await storage.set(settings);
+async function refreshAnalysis() {
     const saveButton = document.getElementById('save');
-    saveButton.textContent = 'Hold tight...';
+    saveButton.textContent = 'Analyzing...';
+    
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        if (tabs && tabs[0]) {
+            chrome.tabs.sendMessage(tabs[0].id, {action: "getPageContent"}, function(response) {
+                if (response && response.content) {
+                    chrome.runtime.sendMessage({
+                        action: "analyzeCurrentPage",
+                        content: response.content
+                    });
+                }
+            });
+        }
+    });
+    
     setTimeout(() => {
         saveButton.textContent = 'Get results';
     }, 2000);
@@ -105,61 +138,30 @@ function updateBadges() {
     if (!badgeContainer) return;
     badgeContainer.innerHTML = '';
 
-    const values = metrics.map(metric => parseInt(document.getElementById(`${metric}Value`).textContent));
-    const average = values.reduce((a, b) => a + b, 0) / values.length;
-
-    if (average >= 70) {
-        addBadge(badges.balancedDiet);
-    }
-    if (parseInt(document.getElementById('factDensityValue').textContent) >= 80) {
-        addBadge(badges.factChecker);
-    }
-    if (parseInt(document.getElementById('perspectiveVitaminsValue').textContent) >= 80) {
-        addBadge(badges.perspectiveSeeker);
-    }
-
-    if (!document.querySelector('style[data-badges]')) {
-        const style = document.createElement('style');
-        style.setAttribute('data-badges', 'true');
-        style.textContent = `
-            .badge {
-                background: linear-gradient(135deg, var(--badge-bg-start) 0%, var(--badge-bg-end) 100%);
-                padding: 15px;
-                border-radius: 8px;
-                text-align: center;
-                box-shadow: 0 2px 4px var(--box-shadow);
-                border: 1px solid var(--border-color);
-                transition: transform 0.2s, box-shadow 0.2s;
-                cursor: default;
+    chrome.storage.local.get(['currentPageAnalysis'], (result) => {
+        if (result.currentPageAnalysis) {
+            if (result.currentPageAnalysis.fact_density >= 80) {
+                addBadge(badges.factChecker);
             }
-            .badge:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px var(--box-shadow);
+            if (result.currentPageAnalysis.perspective_vitamins >= 80) {
+                addBadge(badges.perspectiveSeeker);
             }
-            .badge h4 {
-                margin: 0 0 8px 0;
-                color: var(--badge-text);
-                font-size: 16px;
+            
+            const values = [
+                result.currentPageAnalysis.fact_density,
+                result.currentPageAnalysis.bias_content,
+                result.currentPageAnalysis.emotional_calories,
+                result.currentPageAnalysis.perspective_vitamins,
+                result.currentPageAnalysis.complexity_index,
+                result.currentPageAnalysis.source_minerals
+            ];
+            
+            const average = values.reduce((a, b) => a + b, 0) / values.length;
+            if (average >= 70) {
+                addBadge(badges.balancedDiet);
             }
-            .badge p {
-                margin: 0;
-                font-size: 13px;
-                color: var(--badge-desc);
-                line-height: 1.4;
-            }
-            @keyframes badgeAppear {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
+        }
+    });
 }
 
 function addBadge(badge) {
@@ -172,5 +174,12 @@ function addBadge(badge) {
     `;
     document.getElementById('badges').appendChild(badgeElement);
 }
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "analysisComplete") {
+      updateUI(message.analysis);
+      updateBadges();
+  }
+});
 
 document.addEventListener('DOMContentLoaded', initializeUI);

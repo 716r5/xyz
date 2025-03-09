@@ -4,9 +4,9 @@ import os
 import uuid
 import logging
 import datetime
-from dotenv import load_dotenv
-import textstat
-from textblob import TextBlob
+from dotenv import load_dotenv  # Import "dotenv" could not be resolved
+import textstat  # Import "textstat" could not be resolved
+from textblob import TextBlob  # Import "textblob" could not be resolved
 
 logging.basicConfig(level=logging.INFO)
 load_dotenv()
