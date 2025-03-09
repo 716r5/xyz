@@ -164,3 +164,6 @@ def main():
     # For each cluster, compute average metrics
     for cluster_id, cluster_articles in clusters.items():
         logging.info(f"Cluster {cluster_id} contains {len(cluster_articles)} articles.")
+
+if __name__ == "__main__":
+    main()

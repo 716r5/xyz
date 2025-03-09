@@ -65,7 +65,7 @@ function updateNutritionLabel(analysis) {
   label.querySelector('.source-minerals-value').textContent = `${analysis.source_minerals}%`;
 }
 
-chrome.runtime.sendMessage({ action: "analyzeContent", text: extractText() }, response => {
+chrome.runtime.sendMessage({ action: "analyzeContent", text: extractPageContent().text }, response => {
     if (response.result) {
         displayNutritionLabel(response.result);
     }
