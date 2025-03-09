@@ -1,4 +1,4 @@
-import newspaper3k as n3k
+import newspaper as n3k
 import concurrent.futures
 import os
 import uuid
