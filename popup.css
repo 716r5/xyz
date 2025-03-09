@@ -1,0 +1,75 @@
+body {
+    min-width: 300px;   
+    min-height: 400px;   
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.value-display {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+.value-low {
+    color: #dc3545; 
+}
+
+.value-medium {
+    color: #FF9C9C; 
+}
+
+.value-high {
+    color: #28a745; 
+}
+
+.settings-container {
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.metric-container {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.metric-item {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #495057;
+}
+
+button#save {
+    width: 100%;
+    padding: 12px;
+    background: #FF9C9C;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+button#save:hover {
+    background: #FF9C9C;
+}

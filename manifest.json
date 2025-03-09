@@ -1,0 +1,37 @@
+{
+    "manifest_version": 3,
+    "name": "Lazy Bird",
+    "version": "1.0",
+    "description": "Assess the credibility, bias, and emotional tone of online content.",
+    "permissions": ["storage", "activeTab", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["content.js"],
+            "css": ["styles.css"],
+            "html": ["popup.html"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
+        }
+    },
+    "content_security_policy": {
+        "extension_pages": "default-src 'self'"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["background.css", "styles.css"],
+            "matches": ["<all_urls>"]
+        }
+    ]
+}
+
